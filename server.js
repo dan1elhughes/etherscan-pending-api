@@ -2,6 +2,7 @@ const pending = require('./scrapers/pending');
 const transaction = require('./scrapers/transaction');
 const Koa = require('koa');
 const Router = require('koa-router');
+const cors = require('@koa/cors');
 const app = new Koa();
 const router = new Router();
 
@@ -21,6 +22,7 @@ router.get('/transaction', async ctx => {
 	ctx.body = meta;
 });
 
+app.use(cors());
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(port);
