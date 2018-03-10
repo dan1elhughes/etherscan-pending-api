@@ -15,7 +15,7 @@ module.exports = address => fetch(url(address))
 
 		const token = $('#overview #ContentPlaceHolder1_maintable > div').filter((_, el) =>
 			$(el).text() === 'To:'
-		).next().text().trim();
+		).next().text().replace('Contract', '').trim();
 
 		const from = $('#overview #ContentPlaceHolder1_maintable > div').filter((_, el) =>
 			$(el).text() === 'From:'
@@ -23,10 +23,26 @@ module.exports = address => fetch(url(address))
 
 		const timeFirstSeen = $('#overview #ContentPlaceHolder1_maintable > div').filter((_, el) =>
 			$(el).text() === 'Time FirstSeen:'
-		).next().text().match(/\(([^)]+)\)/)[1];
+		).next().text();
 
-		// Parse time string to unix timestamp
-		const timestamp = moment(timeFirstSeen, 'MMM-DD-YYYY HH:mm:ss A').unix();
+		const blockHeight = $('#overview #ContentPlaceHolder1_maintable > div').filter((_, el) =>
+			$(el).text() === 'Block Height:'
+		).next().text();
 
-		return { txHash: address, token, from, params, timestamp };
+		let confirmations = blockHeight;
+
+		if (blockHeight === '(Pending)') {
+			confirmations = 0;
+		} else {
+			confirmations = parseInt(blockHeight.match(/\d+/gi)[1], 10);
+		}
+
+		let timestamp;
+
+		if (timeFirstSeen) {
+			const dateString = timeFirstSeen.match(/\(([^)]+)\)/)[1];
+			timestamp = moment(dateString, 'MMM-DD-YYYY HH:mm:ss A').unix();
+		}
+
+		return { txHash: address, token, from, params, timestamp, confirmations };
 	});
