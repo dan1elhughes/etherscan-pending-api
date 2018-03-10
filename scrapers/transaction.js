@@ -28,5 +28,5 @@ module.exports = address => fetch(url(address))
 		// Parse time string to unix timestamp
 		const timestamp = moment(timeFirstSeen, 'MMM-DD-YYYY HH:mm:ss A').unix();
 
-		return { token, from, params, timestamp };
+		return { txHash: address, token, from, params, timestamp };
 	});
