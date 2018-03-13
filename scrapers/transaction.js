@@ -21,8 +21,8 @@ module.exports = address => fetch(url(address))
 			$(el).text() === 'From:'
 		).next().text().trim();
 
-		const timeFirstSeen = $('#overview #ContentPlaceHolder1_maintable > div').filter((_, el) =>
-			$(el).text() === 'Time FirstSeen:'
+		const timeLastSeen = $('#overview #ContentPlaceHolder1_maintable > div').filter((_, el) =>
+			$(el).text() === 'Time LastSeen:'
 		).next().text();
 
 		const blockHeight = $('#overview #ContentPlaceHolder1_maintable > div').filter((_, el) =>
@@ -39,8 +39,8 @@ module.exports = address => fetch(url(address))
 
 		let timestamp;
 
-		if (timeFirstSeen) {
-			const dateString = timeFirstSeen.match(/\(([^)]+)\)/)[1];
+		if (timeLastSeen) {
+			const dateString = timeLastSeen.match(/\(([^)]+)\)/)[1];
 			timestamp = moment(dateString, 'MMM-DD-YYYY HH:mm:ss A').unix();
 		}
 
